@@ -52,3 +52,22 @@ def post_detail(slug):
 def tag_detail(slug):
     tag = session.query(Tag).filter(Tag.slug == slug).first()
     return render_template('posts/tag_detail.html', tag = tag)
+
+@posts.route('/<slug>/edit', methods = ['POST', 'GET'])
+def post_update(slug):
+    post = session.query(Post).filter(Post.slug == slug).first()
+
+    if request.method == 'POST':
+        # 使用了 Flask-WTF 提供的表單類 PostForm，將現有的 POST 請求中的表單資料 (request.form) 傳遞給表單
+        # 同時將 post 物件作為 obj 參數傳遞給表單
+        # 目的是將現有的 post 物件的資料填充到表單中，以便在表單中顯示出 post 物件的內容供使用者進行編輯
+        form = PostForm(formdata = request.form, obj = post)
+        # 將表單中的資料填充到指定的目標物件中
+        # 在 Flask-WTF 中，`populate_obj()`這個方法常用於將表單中的資料填充到資料庫模型物件中，從而更新資料庫中的記錄
+        form.populate_obj(post)
+        db.session.commit()
+        return redirect(url_for('posts.post_detail', slug = post.slug))
+    
+    form = PostForm(obj = post)
+    return render_template('posts/edit.html', post = post, form = form)
+    
