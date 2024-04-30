@@ -62,4 +62,7 @@ with app.app_context():
 使用 `$ flask db migrate -m "Initial migration."` 這個指令，使用這個指令時 Flask-Migrate 會檢查應用程式中的資料庫模型和最後一個已遷移的版本之間的差異，然後根據這些差異生成一個新的遷移腳本
 
 ### Step 6 將腳本描述的更改更新到資料庫中
-使用 `$ flask db upgrade` 這個指令
+使用 `$ flask db upgrade` 這個指令，將資料庫遷移到最新的版本。當執行這個命令時，Flask-Migrate 會檢查資料庫中的當前遷移版本，然後將資料庫遷移到最新的版本，以確保資料庫的結構與應用程式中的模型定義保持同步
+
+:sunny: __但在這個專案中， Flask-Migrate 卻發揮不了作用，依照網路上給的步驟做都無法更新資料庫，因此這邊可能還需要在查一些資料__
+

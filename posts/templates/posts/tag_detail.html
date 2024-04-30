@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Posts List
+    Posts with "{{ tag.title }}" tag
 {% endblock %}
 
 {% block content %}
-<h1>Posts</h1>
-    {% for post in posts %}
+    <h1>Posts with the "{{ tag.title }}"</h1>
+    {% for post in tag.posts %}
         {% include 'posts/includes/card.html' %}
     {% endfor %}
 {% endblock %}
