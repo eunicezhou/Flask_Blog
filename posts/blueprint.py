@@ -47,18 +47,18 @@ def posts_list():
 
 @posts.route('/<slug>')
 def post_detail(slug):
-    post = session.query(Post).filter(Post.slug == slug).first()
+    post = session.query(Post).filter(Post.slug == slug).first_or_404()
     return render_template('posts/post_detail.html', post = post)
 
 @posts.route('/tags/<slug>')
 def tag_detail(slug):
-    tag = session.query(Tag).filter(Tag.slug == slug).first()
+    tag = session.query(Tag).filter(Tag.slug == slug).first_or_404()
     return render_template('posts/tag_detail.html', tag = tag)
 
 @posts.route('/<slug>/edit', methods = ['POST', 'GET'])
 @login_required
 def post_update(slug):
-    post = session.query(Post).filter(Post.slug == slug).first()
+    post = session.query(Post).filter(Post.slug == slug).first_or_404()
 
     if request.method == 'POST':
         # 使用了 Flask-WTF 提供的表單類 PostForm，將現有的 POST 請求中的表單資料 (request.form) 傳遞給表單
