@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% from "security/_macros.html" import 
+render_field_with_errors, render_field %}
+{% include "security/_messages.html" %}
+
+<!-- 在 Jinja2 模板中，如果字符串被包裹在括號中，表示不會改變字符串本身 -->
+<h1>{{ ('Login') }}</h1>
+<form action="{{ url_for_security('login') }}" method = "POST"
+name = "login_user_form">
+    {{ login_user_form.hidden_tag() }}
+    {{ render_field_with_errors(login_user_form.email, class = "form-control") }}
+    {{ render_field_with_errors(login_user_form.password, class = "form-control") }}
+    {{ render_field_with_errors(login_user_form.remember) }}
+    {{ render_field(login_user_form.next) }}
+    {{ render_field(login_user_form.submit, class = "btn btn-success") }}
+</form>
+{% include "security/_menu.html" %}
+
+{% endblock %}

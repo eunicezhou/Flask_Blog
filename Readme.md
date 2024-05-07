@@ -64,5 +64,51 @@ with app.app_context():
 ### Step 6 將腳本描述的更改更新到資料庫中
 使用 `$ flask db upgrade` 這個指令，將資料庫遷移到最新的版本。當執行這個命令時，Flask-Migrate 會檢查資料庫中的當前遷移版本，然後將資料庫遷移到最新的版本，以確保資料庫的結構與應用程式中的模型定義保持同步
 
-:sunny: __但在這個專案中， Flask-Migrate 卻發揮不了作用，依照網路上給的步驟做都無法更新資料庫，因此這邊可能還需要在查一些資料__
+:sunny: __如果程式碼中有循環引用時，有可能會造成 Flask-Migrate 運作不成功__
+:sunny: __另外要注意的是在 Flask 應用中，通常會將模型定義寫在單獨的模塊中，例如 models.py，而指令則是在應用的入口文件中（例如 app.py）運行的。然而我有成功建立遷移檔，並更新資訊，但更新後的內容跟我想得不太一樣，這邊的問題還有待解決__
 
+# Flask-Admin
+
+# Flask-Security
+由於 Flask-Security 中有 `_request_ctx_stack` 原本是 Flask 的一部分，但在 Flask 2.0 版本中已被移除，因此在使用 Flask-Security 時有相容性的問題。這邊改安裝 `Flask-Security-Too` 套件來解決
+### 安裝 Flask-Security-Too
+使用 `pip install Flask-Security-Too` 指令來進行安裝
+
+### 使用方式
+與 Flask-Security 相同
+
+### 這個專案中有使用到 Flask-Security 的部分
+__login-required__
+
+用於保護 Flask 應用程式中特定範圍或路由，以確保只有經過身分驗證的用戶才能訪問他們。如果用戶尚未經過身分驗證但嘗試訪問訪問被 login_required 裝飾的視圖時，就會被重新定向到登錄頁面
+
+使用範例如下:
+```python
+from flask_security import login_required
+
+posts = Blueprint('posts', __name__, 
+                  template_folder= 'templates')
+
+@posts.route('/create', methods = ['POST', 'GET'])
+@login_required
+def post_create():
+    form = PostForm()
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        body = request.form.get('body')
+        try:
+            post = Post(title = title, body = body)
+            db.session.add(post)
+            db.session.commit()
+        except:
+            print('traceback')
+        return redirect(url_for('posts.post_detail', slug = post.slug))
+    
+    return render_template('posts/post_create.html', form = form)
+```
+記住，裝飾器的順序不可以改變，否則將無法對路由進行真正的保護
+
+# Flask-WTForm
+
+# email-validator
